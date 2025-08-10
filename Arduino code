@@ -1,0 +1,76 @@
+#include <Servo.h>
+
+Servo myservo;
+
+const int enA = 5;  // PWM سرعة محرك DC
+const int in1 = 3;
+const int in2 = 4;
+
+const int sensorPin = 9;
+const int servoPin = 6;
+
+long duration;
+int distance;
+
+void setup() {
+  Serial.begin(9600);
+
+  // إعداد محرك DC
+  pinMode(enA, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+
+  // إعداد حساس Ultrasonic
+  pinMode(sensorPin, INPUT);
+
+  // إعداد السيرفو
+  myservo.attach(servoPin);
+  myservo.write(90);  // الوضع المستقيم (منتصف زاوية السيرفو)
+
+  // تشغيل محرك DC للأمام
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  analogWrite(enA, 150);
+}
+
+void loop() {
+  duration = pulseIn(sensorPin, HIGH);
+  distance = duration * 0.034 / 2;
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  if (distance <= 10 && distance > 0) {
+    // توقف محرك DC
+    analogWrite(enA, 0);
+
+    // غير اتجاه محرك DC للخلف
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+    analogWrite(enA, 150);
+
+    // تحرك السيرفو إلى اليسار (زاوية 180 درجة)
+    myservo.write(180);
+
+    delay(2000);
+
+    // رجع السيرفو للوضع المستقيم (90 درجة)
+    myservo.write(90);
+
+    // رجع المحرك للسير للأمام
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    analogWrite(enA, 150);
+  }
+  else {
+    // استمر للأمام
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    analogWrite(enA, 150);
+
+    myservo.write(90);
+  }
+
+  delay(200);
+}
