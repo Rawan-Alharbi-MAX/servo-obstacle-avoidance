@@ -129,3 +129,22 @@ void loop() {
   delay(200);
 }
 
+
+
+شرح موجز للكود:
+يقرأ الحساس مسافة العائق.
+
+إذا المسافة أقل من 10 سم، يتوقف محرك DC ثم يعكس اتجاهه لمدة ثانيتين، ويغير زاوية السيرفو إلى 180 درجة (اتجاه يسار).
+
+بعد انتهاء الحركة الخلفية، يعود السيرفو للوضع المستقيم (90 درجة) والمحرك للسير للأمام.
+
+إذا لم يكن هناك عائق، يستمر المحرك بالسير للأمام والسيرفو في وضع 90 درجة.
+
+How to Run (English):
+Connect components as per wiring table above.
+
+Upload the provided Arduino code.
+
+Open Serial Monitor (baud rate 9600) to see distance readings.
+
+Place an obstacle within 10 cm of the ultrasonic sensor; observe DC motor reversing and servo turning left.
